@@ -26,7 +26,7 @@ class DataManager
 
     /**
      *
-     * @var type 
+     * @var type
      */
     protected $abstractStructure;
 
@@ -36,7 +36,7 @@ class DataManager
      * @param \MeetMagentoPL\IntegrationAbstraction\Adapter\RequestFactory $adapterRequestFactory
      */
     protected function __construct(
-        \MeetMagentoPL\IntegrationAbstraction\Request\EntityFactory $requestEntityFactory, 
+        \MeetMagentoPL\IntegrationAbstraction\Request\EntityFactory $requestEntityFactory,
         \MeetMagentoPL\IntegrationAbstraction\Adapter\RequestFactory $adapterRequestFactory
     )
     {
