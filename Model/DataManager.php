@@ -69,7 +69,7 @@ class DataManager
             throw new Exception\WrongTypeOfObjectException($msg);
         }
 
-        return $this->$method($params);
+        return $actionObject->execute($params);
     }
     
     /**
