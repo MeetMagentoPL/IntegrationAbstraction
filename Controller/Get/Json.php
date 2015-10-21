@@ -8,6 +8,8 @@
 namespace MeetMagentoPL\IntegrationAbstraction\Controller\Get;
 
 use \Magento\Framework\App\Action\Action;
+use \MeetMagentoPL\IntegrationAbstraction\Exception;
+
 
 /**
  * Description of Json
@@ -18,21 +20,21 @@ class Json extends Action
 {
     /**
      *
-     * @var \Magento\Framework\Controller\Result\Json
+     * @var \Magento\Framework\Controller\Result\JsonFactory
      */
-    protected $resultJson;
+    protected $resultJsonFactory;
     
     /**
      * 
      * @param \Magento\Framework\App\Action\Context $context
-     * @param \Magento\Framework\Controller\Result\Json $resultJson
+     * @param \Magento\Framework\Controller\Result\Json $resultJsonFactory
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
-        \Magento\Framework\Controller\Result\Json $resultJson
+        \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
     ) {
-        $this->resultJson = $resultJson;
         parent::__construct($context);
+        $this->resultJsonFactory = $resultJsonFactory;
     }
     
     /**
@@ -42,7 +44,8 @@ class Json extends Action
     public function execute()
     {
         $response = (array) $this->getResult();
-        return $this->resultJson->setData($response);
+        $resultJson = $this->resultJsonFactory->create();
+        return $resultJson->setData($response);
     }
     
     /**
@@ -51,7 +54,20 @@ class Json extends Action
      */
     protected function getResult() 
     {
-        $token = $this->getRequest()->getParam('token');
-        return ['success' => true];
+        $result = [];
+        $params = $this->_request->getParams();
+        
+        try {
+            
+            $dataManager = $this->_objectManager->get('MeetMagentoPL\IntegrationAbstraction\Model\DataManager');
+            $result = $dataManager->getResponseData($params);
+            
+        } catch (Exception\InvalidTokenException $exception) {
+            $result['error'] = $exception->getMessage();
+        } catch (Exception\NotExistingEntryPointException $exception) {
+            $result['error'] = $exception->getMessage();
+        } finally {
+            return $result;
+        }
     }
 }
