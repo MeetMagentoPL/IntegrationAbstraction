@@ -43,12 +43,12 @@ class ProductList implements ResponseInterface
 
         $productList = $this->productRepository->getList($searchCriteria);
 
+        $returnArray = [];
         foreach($productList->getItems() as $product) {
-            
+            $returnArray[$product->getId()] = [$product->getSku(), $product->getName()];
         }
 
-        /** @todo implementation */
-        return [['produkt 1', 13.88],['produkt 2', 10.22]];
+        return $returnArray;
     }
 
 }
