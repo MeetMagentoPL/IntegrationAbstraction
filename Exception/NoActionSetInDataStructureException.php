@@ -12,6 +12,6 @@ namespace MeetMagentoPL\IntegrationAbstraction\Exception;
  *
  * @author jakub
  */
-class InvalidTokenException extends \Magento\Framework\Exception\AuthorizationException
+class NoActionSetInDataStructureException extends GenericIntegrationAbstractionException
 {
 }

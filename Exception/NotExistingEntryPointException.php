@@ -11,6 +11,6 @@ namespace MeetMagentoPL\IntegrationAbstraction\Exception;
  *
  * @author jakub
  */
-class NotExistingEntryPointException extends \Exception
+class NotExistingEntryPointException extends GenericIntegrationAbstractionException
 {
 }

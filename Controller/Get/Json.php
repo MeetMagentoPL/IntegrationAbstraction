@@ -62,9 +62,9 @@ class Json extends Action
                     'MeetMagentoPL\IntegrationAbstraction\Model\DataManager'
                 );
             $result = $dataManager->getResponseData($params);
-        } catch (Exception\InvalidTokenException $exception) {
+        } catch (Exception\GenericIntegrationAbstractionException $exception) {
             $result['error'] = $exception->getMessage();
-        } catch (Exception\NotExistingEntryPointException $exception) {
+        } catch (\Exception $exception) {
             $result['error'] = $exception->getMessage();
         } finally {
             return $result;
