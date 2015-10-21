@@ -6,6 +6,6 @@ namespace MeetMagentoPL\IntegrationAbstraction\Exception;
  *
  * @author jakub
  */
-class BaseObjectNotSetException extends \Magento\Framework\Exception\NoSuchEntityException
+class BaseObjectNotSetException extends GenericIntegrationAbstractionException
 {
 }

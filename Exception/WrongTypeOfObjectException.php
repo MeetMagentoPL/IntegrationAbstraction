@@ -6,6 +6,6 @@ namespace MeetMagentoPL\IntegrationAbstraction\Exception;
  *
  * @author jakub
  */
-class WrongTypeOfObjectException extends \Exception
+class WrongTypeOfObjectException extends GenericIntegrationAbstractionException
 {
 }
