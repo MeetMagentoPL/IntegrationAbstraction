@@ -1,8 +1,6 @@
 <?php
 
-namespace MeetMagentoPL\IntegrationAbstraction\Response;
-
-
+namespace MeetMagentoPL\IntegrationAbstraction\Response\Action;
 /**
  * Description of ProductList
  *
