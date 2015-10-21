@@ -5,13 +5,21 @@ namespace MeetMagentoPL\IntegrationAbstraction\Request;
 
 class BaseAdapter extends AdapterAbstract
 {
+    /**
+     * 
+     * @return string
+     */
     public function getAction()
     {
-        // TODO: Implement getAction() method.
+        return $this->getBaseObject()->getAction();
     }
 
+    /**
+     * 
+     * @return mixed
+     */
     public function getParams()
     {
-        // TODO: Implement getParams() method.
+        return $this->getBaseObject()->getParams();
     }
 }

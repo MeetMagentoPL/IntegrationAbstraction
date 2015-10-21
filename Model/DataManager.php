@@ -4,6 +4,7 @@ namespace MeetMagentoPL\IntegrationManager\Model;
 
 use \MeetMagentoPL\IntegrationAbstraction\Exception;
 use \MeetMagentoPL\IntegrationAbstraction\Request\AdapterAbstract;
+use \MeetMagentoPL\IntegrationAbstraction\Response\Action\ResponseInterface;
 
 /**
  * Description of DataManager
@@ -55,14 +56,33 @@ class DataManager
 
         $action = $abstractStructure->getAction();
         $params = $abstractStructure->getParams();
-        $method = 'get' . $action;
+        $actionMap = $this->getActionMap();
 
-        if (!method_exists($this, $method)) {
+        if (!isset($actionMap[$action])) {
             $msg = sprintf('Action "%s" doesn\'t exists.', $action);
             throw new Exception\NotExistingEntryPointException($msg);
         }
+        
+        $actionObject = $this->objectManager->create($actionMap[$action]);
+        if (!is_object($actionObject) || !($actionObject instanceof ResponseInterface)) {
+            $msg = sprintf('Action class must be an instance of %s', ResponseInterface::class);
+            throw new Exception\WrongTypeOfObjectException($msg);
+        }
 
         return $this->$method($params);
+    }
+    
+    /**
+     * Temporary solution.
+     * 
+     * @return array
+     */
+    protected function getActionMap()
+    {
+        return [
+            'product' => '\\MeetMagentoPL\\IntegrationAbstraction\\Response\\Action\\Product',
+            'product:list' => '\\MeetMagentoPL\\IntegrationAbstraction\\Response\\Action\\ProductList',
+        ];
     }
 
     /**
@@ -99,7 +119,7 @@ class DataManager
     {
         if (is_null($this->adapterRequest)) {
             $this->adapterRequest = $this->objectManager->create(
-                    ''
+                    '\\MeetMagentoPL\\IntegrationAbstraction\\Request\\BaseAdapter'
                     );
         }
         

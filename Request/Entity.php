@@ -13,7 +13,4 @@ namespace MeetMagentoPL\IntegrationAbstraction\Request;
  */
 class Entity extends \Magento\Framework\DataObject
 {
-    
-    
-    
 }
