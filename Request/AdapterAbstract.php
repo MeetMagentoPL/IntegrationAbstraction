@@ -2,7 +2,6 @@
 
 namespace MeetMagentoPL\IntegrationAbstraction\Request;
 
-use MeetMagentoPL\IntegrationAbstraction\Model\AbstractStructure;
 use MeetMagentoPL\IntegrationAbstraction\Exception;
 
 abstract class AdapterAbstract implements AdapterInterface
@@ -18,11 +17,10 @@ abstract class AdapterAbstract implements AdapterInterface
     protected $abstractStructureFactory;
 
     /**
-     * 
-     * @param \MeetMagentoPL\IntegrationAbstraction\Request\AbstractStructureFactory $abstractStructureFactory
+     * @param \MeetMagentoPL\IntegrationAbstraction\Model\AbstractStructureFactory $abstractStructureFactory
      */
     public function __construct(
-        AbstractStructureFactory $abstractStructureFactory
+        \MeetMagentoPL\IntegrationAbstraction\Model\AbstractStructureFactory $abstractStructureFactory
     ) {
         $this->abstractStructureFactory = $abstractStructureFactory;
     }
@@ -56,7 +54,8 @@ abstract class AdapterAbstract implements AdapterInterface
     }
 
     /**
-     * @return AbstractStructure
+     * @return mixed
+     * @throws Exception\BaseObjectNotSetException
      */
     final public function getAbstractStructure()
     {

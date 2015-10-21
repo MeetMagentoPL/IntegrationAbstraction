@@ -1,6 +1,6 @@
 <?php
 
-namespace MeetMagentoPL\IntegrationManager\Model;
+namespace MeetMagentoPL\IntegrationAbstraction\Model;
 
 use \MeetMagentoPL\IntegrationAbstraction\Exception;
 use \MeetMagentoPL\IntegrationAbstraction\Request\AdapterAbstract;
@@ -36,7 +36,7 @@ class DataManager
      * 
      * @param \MeetMagentoPL\IntegrationAbstraction\Request\EntityFactory $requestEntityFactory
      */
-    protected function __construct(
+    public function __construct(
         \MeetMagentoPL\IntegrationAbstraction\Request\EntityFactory $requestEntityFactory,
         \Magento\Framework\ObjectManager\ObjectManager $objectManager
     ) {
@@ -45,10 +45,10 @@ class DataManager
     }
 
     /**
-     * 
-     * @param array|mixed $data
-     * @return array
+     * @param $data
+     * @return mixed
      * @throws Exception\NotExistingEntryPointException
+     * @throws Exception\WrongTypeOfObjectException
      */
     public function getResponseData($data)
     {
@@ -80,8 +80,8 @@ class DataManager
     protected function getActionMap()
     {
         return [
-            'product' => '\\MeetMagentoPL\\IntegrationAbstraction\\Response\\Action\\Product',
-            'product:list' => '\\MeetMagentoPL\\IntegrationAbstraction\\Response\\Action\\ProductList',
+            'product' => 'MeetMagentoPL\IntegrationAbstraction\Response\Action\Product',
+            'product-list' => 'MeetMagentoPL\IntegrationAbstraction\Response\Action\ProductList',
         ];
     }
 
@@ -119,10 +119,10 @@ class DataManager
     {
         if (is_null($this->adapterRequest)) {
             $this->adapterRequest = $this->objectManager->create(
-                    '\\MeetMagentoPL\\IntegrationAbstraction\\Request\\BaseAdapter'
-                    );
+                'MeetMagentoPL\IntegrationAbstraction\Request\BaseAdapter'
+            );
         }
-        
+
         return $this->adapterRequest;
     }
 
