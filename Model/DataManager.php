@@ -66,7 +66,7 @@ class DataManager
     }
 
     /**
-     * Does the magic.
+     * Returns AbstractStructure from array.
      * 
      * @param array $requestData
      * @throws Exception\NotExistingEntryPointException
