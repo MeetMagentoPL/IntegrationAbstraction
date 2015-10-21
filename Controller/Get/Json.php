@@ -58,10 +58,10 @@ class Json extends Action
         $params = $this->_request->getParams();
         
         try {
-            
-            $dataManager = $this->_objectManager->get('MeetMagentoPL\IntegrationAbstraction\Model\DataManager');
+            $dataManager = $this->_objectManager->get(
+                    'MeetMagentoPL\IntegrationAbstraction\Model\DataManager'
+                );
             $result = $dataManager->getResponseData($params);
-            
         } catch (Exception\InvalidTokenException $exception) {
             $result['error'] = $exception->getMessage();
         } catch (Exception\NotExistingEntryPointException $exception) {

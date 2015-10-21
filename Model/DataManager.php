@@ -3,6 +3,7 @@
 namespace MeetMagentoPL\IntegrationManager\Model;
 
 use \MeetMagentoPL\IntegrationAbstraction\Exception;
+use \MeetMagentoPL\IntegrationAbstraction\Request\AdapterAbstract;
 
 /**
  * Description of DataManager
@@ -20,28 +21,26 @@ class DataManager
 
     /**
      *
-     * @var \MeetMagentoPL\IntegrationAbstraction\Adapter\RequestFactory
+     * @var \Magento\Framework\ObjectManager\ObjectManager
      */
-    protected $adapterRequestFactory;
+    protected $objectManager;
 
     /**
      *
-     * @var type 
+     * @var AdapterAbstract
      */
-    protected $abstractStructure;
+    protected $adapterRequest;
 
     /**
      * 
      * @param \MeetMagentoPL\IntegrationAbstraction\Request\EntityFactory $requestEntityFactory
-     * @param \MeetMagentoPL\IntegrationAbstraction\Adapter\RequestFactory $adapterRequestFactory
      */
     protected function __construct(
-        \MeetMagentoPL\IntegrationAbstraction\Request\EntityFactory $requestEntityFactory, 
-        \MeetMagentoPL\IntegrationAbstraction\Adapter\RequestFactory $adapterRequestFactory
-    )
-    {
+        \MeetMagentoPL\IntegrationAbstraction\Request\EntityFactory $requestEntityFactory,
+        \Magento\Framework\ObjectManager\ObjectManager $objectManager
+    ) {
         $this->requestEntityFactory = $requestEntityFactory;
-        $this->adapterRequestFactory = $adapterRequestFactory;
+        $this->objectManager = $objectManager;
     }
 
     /**
@@ -52,10 +51,10 @@ class DataManager
      */
     public function getResponseData($data)
     {
-        $this->doThings((array) $data);
+        $abstractStructure = $this->rawDataToAbstractStructure((array) $data);
 
-        $action = $this->abstractStructure->getAction();
-        $params = $this->abstractStructure->getParams();
+        $action = $abstractStructure->getAction();
+        $params = $abstractStructure->getParams();
         $method = 'get' . $action;
 
         if (!method_exists($this, $method)) {
@@ -71,35 +70,40 @@ class DataManager
      * 
      * @param array $requestData
      * @throws Exception\NotExistingEntryPointException
+     * @return \MeetMagentoPL\IntegrationAbstraction\Model\AbstractStructure
      */
-    protected function doThings(array $requestData)
+    protected function rawDataToAbstractStructure(array $requestData)
     {
         $requestEntity = $this->requestEntityFactory->create();
         $requestEntity->setData($requestData);
 
-        $adapter = $this->adapterRequestFactory->create();
-        $adapter->setBaseObject($requestEntity);
+        $this->getAdapter()->setBaseObject($requestEntity);
 
-        $abstractStructure = $adapter->getAbstractStructure();
-
-        $abstractStructure->validate();
-        if (!$abstractStructure->hasAction()) {
-            $msg = 'Empty action';
-            throw new Exception\NotExistingEntryPointException($msg);
-        }
-
-        $this->abstractStructure = $abstractStructure;
+        return $this->getAdapter()->getAbstractStructure();
     }
-
+    
     /**
-     * Returns product list.
      * 
-     * @param array $params
-     * @return array
+     * @param AdapterAbstract $adapterRequest
      */
-    public function getProductList($params = array())
+    public function setAdapter(AdapterAbstract $adapterRequest)
     {
-        return; // products array
+        $this->adapterRequest = $adapterRequest;
+    }
+    
+    /**
+     * 
+     * @return AdapterAbstract
+     */
+    public function getAdapter()
+    {
+        if (is_null($this->adapterRequest)) {
+            $this->adapterRequest = $this->objectManager->create(
+                    ''
+                    );
+        }
+        
+        return $this->adapterRequest;
     }
 
 }
